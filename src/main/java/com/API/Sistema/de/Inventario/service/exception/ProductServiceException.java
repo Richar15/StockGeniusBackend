@@ -6,9 +6,9 @@ import com.API.Sistema.de.Inventario.persistence.repository.ProductRepository;
 import java.util.List;
 import java.util.Optional;
 
-public class IProductException extends RuntimeException {
+public class ProductServiceException extends RuntimeException {
 
-    public IProductException(String message) {
+    public ProductServiceException(String message) {
         super(message);
     }
 
@@ -48,21 +48,21 @@ public class IProductException extends RuntimeException {
         }
     }
 
-    public static void validateProductExists(Optional<ProductEntity> product, String name) throws IProductException {
+    public static void validateProductExists(Optional<ProductEntity> product, String name) throws ProductServiceException {
         if (!product.isPresent()) {
-            throw new IProductException("Producto no encontrado: " + name);
+            throw new ProductServiceException("Producto no encontrado: " + name);
         }
     }
 
-    public static void validateProducts(List<ProductEntity> products, String name) throws IProductException {
+    public static void validateProducts(List<ProductEntity> products, String name) throws ProductServiceException {
         if (products.isEmpty()) {
-            throw new IProductException("No se encontraron productos con el nombre: " + name);
+            throw new ProductServiceException("No se encontraron productos con el nombre: " + name);
         }
     }
 
-    public static void validateProductList(List<ProductEntity> products) throws IProductException {
+    public static void validateProductList(List<ProductEntity> products) throws ProductServiceException {
         if (products == null || products.isEmpty()) {
-            throw new IProductException("No fue posible traer los productos.");
+            throw new ProductServiceException("No fue posible traer los productos.");
         }
     }
 

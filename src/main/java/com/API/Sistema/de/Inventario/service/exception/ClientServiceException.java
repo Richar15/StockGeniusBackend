@@ -1,15 +1,14 @@
 package com.API.Sistema.de.Inventario.service.exception;
 
 import com.API.Sistema.de.Inventario.persistence.entity.ClientEntity;
-import com.API.Sistema.de.Inventario.persistence.entity.ProductEntity;
 import com.API.Sistema.de.Inventario.persistence.repository.ClientRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public class IClientException extends RuntimeException {
+public class ClientServiceException extends RuntimeException {
 
-    public IClientException(String message) {
+    public ClientServiceException(String message) {
         super(message);
     }
 
@@ -54,7 +53,7 @@ public class IClientException extends RuntimeException {
         try {
             return clientRepository.save(client);
         } catch (Exception e) {
-            throw new IClientException("Error al guardar el cliente: " + e.getMessage());
+            throw new ClientServiceException("Error al guardar el cliente: " + e.getMessage());
         }
     }
 
@@ -69,9 +68,9 @@ public class IClientException extends RuntimeException {
             throw new IllegalArgumentException("No existe un cliente con el nombre " + name);
         }
     }
-    public static void validateClientList(List<ClientEntity> clients) throws IClientException {
+    public static void validateClientList(List<ClientEntity> clients) throws ClientServiceException {
         if (clients == null || clients.isEmpty()) {
-            throw new IClientException("No fue posible traer los clientes.");
+            throw new ClientServiceException("No fue posible traer los clientes.");
         }
     }
 

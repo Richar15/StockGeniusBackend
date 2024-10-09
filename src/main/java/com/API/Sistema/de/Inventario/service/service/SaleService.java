@@ -1,4 +1,4 @@
-package com.API.Sistema.de.Inventario.service.implementation;
+package com.API.Sistema.de.Inventario.service.service;
 
 import com.API.Sistema.de.Inventario.persistence.entity.ClientEntity;
 import com.API.Sistema.de.Inventario.persistence.entity.ProductEntity;
@@ -30,7 +30,7 @@ import java.util.stream.Stream;
 import static java.lang.String.valueOf;
 
 @Service
-public class ISale {
+public class SaleService {
 
     @Autowired
     private SaleRepository saleRepository;

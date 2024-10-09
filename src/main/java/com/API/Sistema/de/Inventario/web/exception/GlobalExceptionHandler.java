@@ -1,6 +1,6 @@
 package com.API.Sistema.de.Inventario.web.exception;
 
-import com.API.Sistema.de.Inventario.service.exception.IProductException;
+import com.API.Sistema.de.Inventario.service.exception.ProductServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(IProductException.class)
+    @ExceptionHandler(ProductServiceException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<String> handleIProductException(IProductException ex) {
+    public ResponseEntity<String> handleIProductException(ProductServiceException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 

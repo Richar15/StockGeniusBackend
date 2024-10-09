@@ -1,4 +1,4 @@
-package com.API.Sistema.de.Inventario.service.implementation;
+package com.API.Sistema.de.Inventario.service.service;
 
 import com.API.Sistema.de.Inventario.persistence.entity.ProductEntity;
 import com.API.Sistema.de.Inventario.persistence.entity.QuotationEntity;
@@ -21,7 +21,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
-public class IQuotation {
+public class QuotationService {
 
     @Autowired
     private ProductRepository productRepository;

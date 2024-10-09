@@ -2,7 +2,7 @@ package com.API.Sistema.de.Inventario.web.controller;
 
 import com.API.Sistema.de.Inventario.persistence.entity.SaleEntity;
 import com.API.Sistema.de.Inventario.service.exception.PartialPeriodException;
-import com.API.Sistema.de.Inventario.service.implementation.ISale;
+import com.API.Sistema.de.Inventario.service.service.SaleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +10,6 @@ import org.springframework.http.HttpHeaders;
 
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.MediaType;
@@ -26,12 +25,12 @@ import org.springframework.core.io.InputStreamResource;
 public class SaleController {
 
     @Autowired
-    private ISale iSale;
+    private SaleService saleService;
 
     @PostMapping("/createSale")
     public ResponseEntity<?> createSale(@RequestBody SaleEntity sale) {
         try {
-            iSale.createSale(sale);
+            saleService.createSale(sale);
 
             // Obtener el archivo PDF generado
             File file = new File("Venta_" + sale.getId() + ".pdf");
@@ -56,7 +55,7 @@ public class SaleController {
     @GetMapping("/getSaleByday")
     public ResponseEntity<Map<String, Object>> getSalesByDay(@RequestParam("date") String date) {
         LocalDate localDate = LocalDate.parse(date);
-        Map<String, Object> response = iSale.getSalesByDay(localDate);
+        Map<String, Object> response = saleService.getSalesByDay(localDate);
         return ResponseEntity.ok(response);
     }
 
@@ -65,7 +64,7 @@ public class SaleController {
         LocalDate localDate = LocalDate.parse(date);
         Map<String, Object> response = new HashMap<>();
         try {
-            response = iSale.getSalesByWeek(localDate);
+            response = saleService.getSalesByWeek(localDate);
             response.put("message", "Ventas de la semana completa.");
         } catch (PartialPeriodException e) {
             response.put("message", e.getMessage());
@@ -80,7 +79,7 @@ public class SaleController {
         LocalDate localDate = LocalDate.parse(date);
         Map<String, Object> response = new HashMap<>();
         try {
-            response = iSale.getSalesByMonth(localDate);
+            response = saleService.getSalesByMonth(localDate);
             response.put("message", "Ventas del mes completo.");
         } catch (PartialPeriodException e) {
             response.put("message", e.getMessage());

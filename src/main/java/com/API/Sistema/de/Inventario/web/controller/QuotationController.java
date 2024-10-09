@@ -2,7 +2,7 @@ package com.API.Sistema.de.Inventario.web.controller;
 
 
 import com.API.Sistema.de.Inventario.persistence.entity.ProductEntity;
-import com.API.Sistema.de.Inventario.service.implementation.IQuotation;
+import com.API.Sistema.de.Inventario.service.service.QuotationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,13 +23,13 @@ import org.springframework.web.bind.annotation.*;
 public class QuotationController {
 
     @Autowired
-    private IQuotation iQuotation;
+    private QuotationService quotationService;
 
 
     @PostMapping("/createQuotation")
     public ResponseEntity<?> createQuotation(@RequestBody List<ProductEntity> selectedProducts) {
         try {
-            String quotationMessage = iQuotation.createQuotation(selectedProducts);
+            String quotationMessage = quotationService.createQuotation(selectedProducts);
 
 
             File file = new File("Cotizacion.pdf");
