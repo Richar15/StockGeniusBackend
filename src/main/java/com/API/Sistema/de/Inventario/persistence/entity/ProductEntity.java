@@ -1,4 +1,5 @@
 package com.API.Sistema.de.Inventario.persistence.entity;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,10 +29,7 @@ public class ProductEntity {
 
     @Lob
     @Column(name = "image", columnDefinition = "BLOB")
-    private byte[] image ;
-
-
-
+    private byte[] image;
 
 
 }

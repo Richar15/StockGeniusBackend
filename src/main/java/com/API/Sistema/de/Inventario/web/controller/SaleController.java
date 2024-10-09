@@ -1,14 +1,25 @@
 package com.API.Sistema.de.Inventario.web.controller;
+
 import com.API.Sistema.de.Inventario.persistence.entity.SaleEntity;
 import com.API.Sistema.de.Inventario.service.exception.PartialPeriodException;
 import com.API.Sistema.de.Inventario.service.implementation.ISale;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpHeaders;
 
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.http.MediaType;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import org.springframework.core.io.InputStreamResource;
 
 @RestController
 @RequestMapping("/sales")
@@ -18,44 +29,64 @@ public class SaleController {
     private ISale iSale;
 
     @PostMapping("/createSale")
-    public SaleEntity createSale(@RequestBody SaleEntity sale) {
-        iSale.createSale(sale);
-        return sale;
+    public ResponseEntity<?> createSale(@RequestBody SaleEntity sale) {
+        try {
+            iSale.createSale(sale);
+
+            // Obtener el archivo PDF generado
+            File file = new File("Venta_" + sale.getId() + ".pdf");
+            InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", file.getName()));
+            headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+            headers.add("Pragma", "no-cache");
+            headers.add("Expires", "0");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .contentLength(file.length())
+                    .contentType(MediaType.parseMediaType("application/pdf"))
+                    .body(resource);
+        } catch (RuntimeException | IOException e) {
+            return ResponseEntity.badRequest().body("Error al crear la venta: " + e.getMessage());
+        }
     }
 
-    @GetMapping("/day")
-    public List<SaleEntity> getSalesByDay(@RequestParam("date") String date) {
+    @GetMapping("/getSaleByday")
+    public ResponseEntity<Map<String, Object>> getSalesByDay(@RequestParam("date") String date) {
         LocalDate localDate = LocalDate.parse(date);
-        return iSale.getSalesByDay(localDate);
+        Map<String, Object> response = iSale.getSalesByDay(localDate);
+        return ResponseEntity.ok(response);
     }
-    @GetMapping("/week")
-    public Map<String, Object> getSalesByWeek(@RequestParam("date") String date) {
+
+    @GetMapping("/getSaleByweek")
+    public ResponseEntity<Map<String, Object>> getSalesByWeek(@RequestParam("date") String date) {
         LocalDate localDate = LocalDate.parse(date);
         Map<String, Object> response = new HashMap<>();
         try {
-            List<SaleEntity> sales = iSale.getSalesByWeek(localDate);
+            response = iSale.getSalesByWeek(localDate);
             response.put("message", "Ventas de la semana completa.");
-            response.put("sales", sales);
         } catch (PartialPeriodException e) {
             response.put("message", e.getMessage());
             response.put("sales", e.getSales());
         }
-        return response;
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/month")
-    public Map<String, Object> getSalesByMonth(@RequestParam("date") String date) {
+
+    @GetMapping("/getSaleBymonth")
+    public ResponseEntity<Map<String, Object>> getSalesByMonth(@RequestParam("date") String date) {
         LocalDate localDate = LocalDate.parse(date);
         Map<String, Object> response = new HashMap<>();
         try {
-            List<SaleEntity> sales = iSale.getSalesByMonth(localDate);
+            response = iSale.getSalesByMonth(localDate);
             response.put("message", "Ventas del mes completo.");
-            response.put("sales", sales);
         } catch (PartialPeriodException e) {
             response.put("message", e.getMessage());
             response.put("sales", e.getSales());
         }
-        return response;
+        return ResponseEntity.ok(response);
     }
 
 }
