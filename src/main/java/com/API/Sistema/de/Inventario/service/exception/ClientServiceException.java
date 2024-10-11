@@ -29,17 +29,6 @@ public class ClientServiceException extends RuntimeException {
             throw new IllegalArgumentException("El teléfono debe tener 10 dígitos");
         }
 
-        Optional<ClientEntity> existingClientWithSameName = clientRepository.findByName(client.getName());
-        if (existingClientWithSameName.isPresent() && !existingClientWithSameName.get().getId().equals(client.getId())) {
-            throw new IllegalArgumentException("Ya existe un cliente con ese nombre");
-        }
-
-        List<ClientEntity> existingClientsWithSameLastName = clientRepository.findByLastName(client.getLastName());
-        for (ClientEntity existingClient : existingClientsWithSameLastName) {
-            if (!existingClient.getId().equals(client.getId())) {
-                throw new IllegalArgumentException("Ya existe un cliente con ese apellido");
-            }
-        }
 
         List<ClientEntity> existingClientsWithSamePhone = clientRepository.findByPhone(client.getPhone());
         for (ClientEntity existingClient : existingClientsWithSamePhone) {
