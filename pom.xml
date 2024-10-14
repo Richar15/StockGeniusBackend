@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.API</groupId>
-    <artifactId>Sistema-de-Inventario</artifactId>
+    <artifactId>StockGenius-Backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Sistema-de-Inventario</name>
     <description>App backend of an inventory</description>
