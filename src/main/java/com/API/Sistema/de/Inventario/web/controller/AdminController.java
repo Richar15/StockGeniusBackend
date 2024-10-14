@@ -15,6 +15,12 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
+    @PostMapping("/regenerate-password")
+    public ResponseEntity<String> regeneratePassword() {
+        String newPassword = adminService.regeneratePassword();
+        return ResponseEntity.ok("New system password: " + newPassword);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestParam String password) {
         if (adminService.verifyPassword(password)) {
@@ -23,11 +29,4 @@ public class AdminController {
             return ResponseEntity.badRequest().body("Invalid password");
         }
     }
-
-    @PostMapping("/regenerate-password")
-    public ResponseEntity<String> regeneratePassword() {
-        String newPassword = adminService.regeneratePassword();
-        return ResponseEntity.ok("New system password: " + newPassword);
-    }
-
 }
