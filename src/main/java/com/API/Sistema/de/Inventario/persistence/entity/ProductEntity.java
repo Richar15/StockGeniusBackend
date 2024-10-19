@@ -15,16 +15,16 @@ public class ProductEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name = "name")
+    @Column(name = "name")
     private String name;
 
-    @JoinColumn(name = "description")
+    @Column(name = "description")
     private String description;
 
-    @JoinColumn(name = "price")
+    @Column(name = "price")
     private int price;
 
-    @JoinColumn(name = "amount")
+    @Column(name = "amount")
     private int amount;
 
     @Lob

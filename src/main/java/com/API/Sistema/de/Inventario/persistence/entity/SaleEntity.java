@@ -17,7 +17,7 @@ public class SaleEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name = "date")
+    @Column(name = "date")
     private LocalDate date;
 
     @Column(name = "price_total")
@@ -36,7 +36,6 @@ public class SaleEntity {
 
     @Column(name = "client_name")
     private String clientName;
-
 
     @Column(name = "product_name")
     private String productName;

@@ -17,16 +17,16 @@ public class ClientEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name = "name")
+    @Column(name = "name")
     private String name;
 
-    @JoinColumn(name = "last_name")
+    @Column(name = "last_name")
     private String lastName;
 
-    @JoinColumn(name = "phone")
+    @Column(name = "phone")
     private String phone;
 
-    @JoinColumn(name = "email")
+    @Column(name = "email")
     private String direction;
 
 

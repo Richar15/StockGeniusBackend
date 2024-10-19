@@ -60,7 +60,6 @@ public class ProductController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-
     @PostMapping("/{productId}/image")
     public ResponseEntity<ProductEntity> uploadImage(@PathVariable Long productId, @RequestParam("imageFile") MultipartFile imageFile) throws ImageServiceException {
         ProductEntity updatedProduct = imageService.uploadImage(productId, imageFile);
