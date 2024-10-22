@@ -18,7 +18,7 @@ public class AdminController {
     @PostMapping("/regenerate-password")
     public ResponseEntity<String> regeneratePassword() {
         String newPassword = adminService.regeneratePassword();
-        return ResponseEntity.ok("New system password: " + newPassword);
+        return ResponseEntity.ok("" + newPassword);
     }
 
     @PostMapping("/login")
