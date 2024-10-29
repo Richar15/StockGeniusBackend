@@ -7,11 +7,13 @@ import com.API.Sistema.de.Inventario.service.service.ImageService;
 import com.API.Sistema.de.Inventario.service.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/products")
@@ -70,6 +72,35 @@ public class ProductController {
     public ResponseEntity<ProductEntity> updateImage(@PathVariable Long productId, @RequestParam ("imageFile")MultipartFile imageFile) throws ImageServiceException {
         ProductEntity updatedProduct = imageService.updateImage(productId, imageFile);
         return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+    }
+
+    @ExceptionHandler({ProductServiceException.class, ImageServiceException.class})
+    public ResponseEntity<String> handleServiceExceptions(RuntimeException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/{id}/image")
+    public ResponseEntity<byte[]> getImage(@PathVariable Long id) {
+        // Llama al servicio para obtener el producto por ID
+        ProductEntity product = productService.getProductById(id);
+
+        // Verifica si el producto existe
+        if (product != null && product.getImage() != null) {
+            // Devuelve la imagen como un arreglo de bytes
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG) // Cambia esto según el tipo de imagen
+                    .body(product.getImage());
+        } else {
+            // Si no hay imagen, devuelve un 404
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductEntity> getProductById(@PathVariable Long id) {
+        Optional<ProductEntity> product = productService.findById(id);
+        return product.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
 

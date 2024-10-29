@@ -42,6 +42,16 @@ public class ProductService {
         return products;
     }
 
+    // Método para obtener un producto por ID
+    public ProductEntity getProductById(Long id) {
+        Optional<ProductEntity> product = productRepository.findById(id);
+        return product.orElse(null); // Devuelve el producto si existe, o null si no
+    }
+
+    // Método para encontrar un producto por ID
+    public Optional<ProductEntity> findById(Long id) {
+        return productRepository.findById(id);
+    }
 
 }
 
