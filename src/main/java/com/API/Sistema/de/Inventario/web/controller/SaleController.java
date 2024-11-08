@@ -62,14 +62,7 @@ public class SaleController {
     @GetMapping("/getSaleByweek")
     public ResponseEntity<Map<String, Object>> getSalesByWeek(@RequestParam("date") String date) {
         LocalDate localDate = LocalDate.parse(date);
-        Map<String, Object> response = new HashMap<>();
-        try {
-            response = saleService.getSalesByWeek(localDate);
-            response.put("message", "Ventas de la semana completa.");
-        } catch (PartialPeriodException e) {
-            response.put("message", e.getMessage());
-            response.put("sales", e.getSales());
-        }
+        Map<String, Object> response = saleService.getSalesByWeek(localDate);
         return ResponseEntity.ok(response);
     }
 

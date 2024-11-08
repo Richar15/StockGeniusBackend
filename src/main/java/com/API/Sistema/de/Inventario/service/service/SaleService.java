@@ -153,13 +153,16 @@ public class SaleService {
         List<SaleEntity> sales = saleRepository.findAllByDateBetween(startOfWeek, endOfWeek);
         int totalPrice = sales.stream().mapToInt(SaleEntity::getPriceTotal).sum();
 
-        if (currentDate.isBefore(endOfWeek)) {
-            throw new PartialPeriodException("Aún no ha transcurrido una semana completa, pero estas son las ventas hasta el momento.", sales);
-        }
-
         Map<String, Object> response = new HashMap<>();
         response.put("sales", sales);
-        response.put("Las ventas Generadas en esta Semana han Sido de: ", totalPrice);
+        response.put("Las ventas Generadas  Esta Semana Han Sido de: ", totalPrice);
+
+        if (currentDate.isBefore(endOfWeek)) {
+            response.put("message", "Aún no ha transcurrido una semana completa, pero estas son las ventas hasta el momento.");
+        } else {
+            response.put("message", "Ventas de la semana completa.");
+        }
+
         return response;
     }
 
@@ -171,13 +174,16 @@ public class SaleService {
         List<SaleEntity> sales = saleRepository.findAllByDateBetween(startOfMonth, endOfMonth);
         int totalPrice = sales.stream().mapToInt(SaleEntity::getPriceTotal).sum();
 
-        if (currentDate.isBefore(endOfMonth)) {
-            throw new PartialPeriodException("Aún no ha transcurrido un mes completo, pero estas son las ventas hasta el momento.", sales);
-        }
-
         Map<String, Object> response = new HashMap<>();
         response.put("sales", sales);
-        response.put("Las ventas Generadas de este mes han Sido de: ", totalPrice);
+        response.put("Las ventas Generadas  De este Mes Han Sido de: ", totalPrice);
+
+        if (currentDate.isBefore(endOfMonth)) {
+            response.put("message", "Aún no ha transcurrido un mes completo, pero estas son las ventas hasta el momento.");
+        } else {
+            response.put("message", "Ventas del mes completo.");
+        }
+
         return response;
     }
 
