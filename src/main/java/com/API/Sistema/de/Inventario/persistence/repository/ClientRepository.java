@@ -16,7 +16,7 @@ public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
 
     Optional<ClientEntity> findByName(String name);
 
-    void deleteByName(String name);
+    void deleteById(Long id);
 
     List<ClientEntity> findByNameContainingIgnoreCase(String name);
 
@@ -25,4 +25,6 @@ public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
     List<ClientEntity> findByLastName(String lastName);
 
     List<ClientEntity> findByPhone(String phone);
+
+    Optional<ClientEntity> findByGmail(String gmail);
 }

@@ -21,11 +21,12 @@ public class ClientService {
         return ClientServiceException.handleSaveException(clientRepository, client);
     }
 
-    public void deleteByName(String name) {
-        ClientServiceException.validateName(name);
-        Optional<ClientEntity> client = clientRepository.findByName(name);
-        ClientServiceException.validateClientExists(client, name);
-        clientRepository.delete(client.get());
+    public void deleteById(Long id) {
+        Optional<ClientEntity> client = clientRepository.findById(id);
+        if (!client.isPresent()) {
+            throw new IllegalArgumentException("No existe un cliente con el ID " + id);
+        }
+        clientRepository.deleteById(id);
     }
 
     public List<ClientEntity> searchClientByName(String name) throws ClientServiceException {

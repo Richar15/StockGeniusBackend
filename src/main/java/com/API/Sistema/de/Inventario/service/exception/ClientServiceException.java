@@ -28,13 +28,20 @@ public class ClientServiceException extends RuntimeException {
         if (client.getPhone().length() != 10) {
             throw new IllegalArgumentException("El teléfono debe tener 10 dígitos");
         }
-
+        if (client.getGmail() == null || client.getGmail().isEmpty()) {
+            throw new IllegalArgumentException("El gmail del cliente es obligatorio");
+        }
 
         List<ClientEntity> existingClientsWithSamePhone = clientRepository.findByPhone(client.getPhone());
         for (ClientEntity existingClient : existingClientsWithSamePhone) {
             if (!existingClient.getId().equals(client.getId())) {
                 throw new IllegalArgumentException("Ya existe un cliente con ese teléfono");
             }
+        }
+
+        Optional<ClientEntity> existingClientWithSameGmail = clientRepository.findByGmail(client.getGmail());
+        if (existingClientWithSameGmail.isPresent() && !existingClientWithSameGmail.get().getId().equals(client.getId())) {
+            throw new IllegalArgumentException("Ya existe un cliente con ese gmail");
         }
     }
 

@@ -26,8 +26,10 @@ public class ClientEntity {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "email")
+    @Column(name = "direction")
     private String direction;
 
+    @Column(name = "gmail")
+    private String gmail;
 
 }

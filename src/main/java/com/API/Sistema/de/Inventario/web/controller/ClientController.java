@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/clients")
@@ -30,15 +31,35 @@ public class ClientController {
 
     @PutMapping("/updateClient/{id}")
     public ResponseEntity<ClientEntity> updateClient(@PathVariable Long id, @RequestBody ClientEntity client) {
+        Optional<ClientEntity> existingClient = clientRepository.findById(id);
+        if (!existingClient.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         client.setId(id);
         ClientServiceException.validateClient(client, clientRepository);
         return ResponseEntity.ok(ClientServiceException.handleSaveException(clientRepository, client));
     }
 
-    @DeleteMapping("/deleteClient/{name}")
-    public ResponseEntity<String> deleteByName(@PathVariable String name) throws ClientServiceException {
-        clientService.deleteByName(name);
-        return new ResponseEntity<>("Cliente eliminado exitosamente.", HttpStatus.OK);
+
+    @DeleteMapping("/deleteClient/{id}")
+    public ResponseEntity<String> deleteById(@PathVariable Long id) {
+        try {
+            clientService.deleteById(id);
+            return new ResponseEntity<>("Cliente eliminado exitosamente.", HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error al eliminar el cliente.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/client/{id}")
+    public ResponseEntity<ClientEntity> getClientById(@PathVariable Long id) {
+        Optional<ClientEntity> client = clientRepository.findById(id);
+        if (client.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(client.get());
     }
 
 
