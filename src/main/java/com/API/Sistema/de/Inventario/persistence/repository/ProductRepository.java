@@ -21,4 +21,5 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
     List<ProductEntity> findAll();
 
+    List<ProductEntity> findByAmountLessThanEqual(int amount);
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -81,17 +82,17 @@ public class ProductController {
 
     @GetMapping("/{id}/image")
     public ResponseEntity<byte[]> getImage(@PathVariable Long id) {
-        // Llama al servicio para obtener el producto por ID
+
         ProductEntity product = productService.getProductById(id);
 
-        // Verifica si el producto existe
+
         if (product != null && product.getImage() != null) {
-            // Devuelve la imagen como un arreglo de bytes
+
             return ResponseEntity.ok()
-                    .contentType(MediaType.IMAGE_JPEG) // Cambia esto según el tipo de imagen
+                    .contentType(MediaType.IMAGE_JPEG)
                     .body(product.getImage());
         } else {
-            // Si no hay imagen, devuelve un 404
+
             return ResponseEntity.notFound().build();
         }
     }
@@ -101,6 +102,11 @@ public class ProductController {
         Optional<ProductEntity> product = productService.findById(id);
         return product.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/low-stock")
+    public Map<String, Object> getLowStockProducts() {
+        return productService.getLowStockProducts();
     }
 }
 

@@ -6,7 +6,9 @@ import com.API.Sistema.de.Inventario.service.exception.ProductServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -42,15 +44,23 @@ public class ProductService {
         return products;
     }
 
-    // Método para obtener un producto por ID
+
     public ProductEntity getProductById(Long id) {
         Optional<ProductEntity> product = productRepository.findById(id);
-        return product.orElse(null); // Devuelve el producto si existe, o null si no
+        return product.orElse(null);
     }
 
-    // Método para encontrar un producto por ID
+
     public Optional<ProductEntity> findById(Long id) {
         return productRepository.findById(id);
+    }
+
+    public Map<String, Object> getLowStockProducts() {
+        List<ProductEntity> lowStockProducts = productRepository.findByAmountLessThanEqual(10);
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Estos productos están casi agotados, por favor actualice su cantidad en bodega.");
+        response.put("products", lowStockProducts);
+        return response;
     }
 
 }
