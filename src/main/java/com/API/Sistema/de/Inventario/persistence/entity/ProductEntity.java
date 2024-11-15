@@ -32,4 +32,7 @@ public class ProductEntity {
     private byte[] image;
 
 
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private CategoriesEntity category;
 }
