@@ -32,7 +32,7 @@ public class SaleController {
         try {
             saleService.createSale(sale);
 
-            // Obtener el archivo PDF generado
+
             File file = new File("Venta_" + sale.getId() + ".pdf");
             InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 
@@ -59,25 +59,16 @@ public class SaleController {
         return ResponseEntity.ok(response);
     }
 
+
     @GetMapping("/getSaleByweek")
-    public ResponseEntity<Map<String, Object>> getSalesByWeek(@RequestParam("date") String date) {
-        LocalDate localDate = LocalDate.parse(date);
-        Map<String, Object> response = saleService.getSalesByWeek(localDate);
+    public ResponseEntity<Map<String, Object>> getSalesByWeek() {
+        Map<String, Object> response = saleService.getSalesByWeek();
         return ResponseEntity.ok(response);
     }
 
-
     @GetMapping("/getSaleBymonth")
-    public ResponseEntity<Map<String, Object>> getSalesByMonth(@RequestParam("date") String date) {
-        LocalDate localDate = LocalDate.parse(date);
-        Map<String, Object> response = new HashMap<>();
-        try {
-            response = saleService.getSalesByMonth(localDate);
-            response.put("message", "Ventas del mes completo.");
-        } catch (PartialPeriodException e) {
-            response.put("message", e.getMessage());
-            response.put("sales", e.getSales());
-        }
+    public ResponseEntity<Map<String, Object>> getSalesByMonth() {
+        Map<String, Object> response = saleService.getSalesByMonth();
         return ResponseEntity.ok(response);
     }
 

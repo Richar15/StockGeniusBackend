@@ -101,6 +101,7 @@ public class SaleService {
             document.add(new Paragraph("Cliente: " + sale.getClient().getName() + " " + sale.getClient().getLastName(), normalFont));
             document.add(new Paragraph("Teléfono: " + sale.getClient().getPhone(), normalFont));
             document.add(new Paragraph("Dirección: " + sale.getClient().getDirection(), normalFont));
+            document.add(new Paragraph("Gmail: " + sale.getClient().getGmail(), normalFont));
             document.add(new Paragraph("ID de Venta: " + sale.getId(), normalFont));
             document.add(Chunk.NEWLINE);
 
@@ -145,9 +146,9 @@ public class SaleService {
         return response;
     }
 
-    public Map<String, Object> getSalesByWeek(LocalDate date) {
-        LocalDate startOfWeek = date;
-        LocalDate endOfWeek = date.plusDays(6);
+    public Map<String, Object> getSalesByWeek() {
+        LocalDate startOfWeek = LocalDate.now().with(java.time.DayOfWeek.MONDAY);
+        LocalDate endOfWeek = startOfWeek.plusDays(6);
         LocalDate currentDate = LocalDate.now();
 
         List<SaleEntity> sales = saleRepository.findAllByDateBetween(startOfWeek, endOfWeek);
@@ -155,7 +156,7 @@ public class SaleService {
 
         Map<String, Object> response = new HashMap<>();
         response.put("sales", sales);
-        response.put("Las ventas Generadas  Esta Semana Han Sido de: ", totalPrice);
+        response.put("Las ventas Generadas Esta Semana Han Sido de: ", totalPrice);
 
         if (currentDate.isBefore(endOfWeek)) {
             response.put("message", "Aún no ha transcurrido una semana completa, pero estas son las ventas hasta el momento.");
@@ -166,9 +167,9 @@ public class SaleService {
         return response;
     }
 
-    public Map<String, Object> getSalesByMonth(LocalDate date) {
-        LocalDate startOfMonth = date;
-        LocalDate endOfMonth = date.plusDays(29);
+    public Map<String, Object> getSalesByMonth() {
+        LocalDate startOfMonth = LocalDate.now().withDayOfMonth(1);
+        LocalDate endOfMonth = startOfMonth.plusMonths(1).minusDays(1);
         LocalDate currentDate = LocalDate.now();
 
         List<SaleEntity> sales = saleRepository.findAllByDateBetween(startOfMonth, endOfMonth);
@@ -176,7 +177,7 @@ public class SaleService {
 
         Map<String, Object> response = new HashMap<>();
         response.put("sales", sales);
-        response.put("Las ventas Generadas  De este Mes Han Sido de: ", totalPrice);
+        response.put("Las ventas Generadas De este Mes Han Sido de: ", totalPrice);
 
         if (currentDate.isBefore(endOfMonth)) {
             response.put("message", "Aún no ha transcurrido un mes completo, pero estas son las ventas hasta el momento.");
@@ -186,6 +187,4 @@ public class SaleService {
 
         return response;
     }
-
-
 }
