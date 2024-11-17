@@ -6,10 +6,18 @@ import com.API.Sistema.de.Inventario.persistence.entity.SaleEntity;
 import com.API.Sistema.de.Inventario.persistence.repository.ClientRepository;
 import com.API.Sistema.de.Inventario.persistence.repository.ProductRepository;
 import com.API.Sistema.de.Inventario.persistence.repository.SaleRepository;
+import com.API.Sistema.de.Inventario.service.exception.NoProductsSoldException;
 import com.API.Sistema.de.Inventario.service.exception.PartialPeriodException;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtils;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -187,4 +195,5 @@ public class SaleService {
 
         return response;
     }
+
 }

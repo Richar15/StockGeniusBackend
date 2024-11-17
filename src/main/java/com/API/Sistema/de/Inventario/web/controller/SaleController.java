@@ -1,9 +1,11 @@
 package com.API.Sistema.de.Inventario.web.controller;
 
 import com.API.Sistema.de.Inventario.persistence.entity.SaleEntity;
+import com.API.Sistema.de.Inventario.service.exception.NoProductsSoldException;
 import com.API.Sistema.de.Inventario.service.exception.PartialPeriodException;
 import com.API.Sistema.de.Inventario.service.service.SaleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpHeaders;

@@ -1,6 +1,7 @@
 package com.API.Sistema.de.Inventario.web.exception;
 
 import com.API.Sistema.de.Inventario.service.exception.ClientServiceException;
+import com.API.Sistema.de.Inventario.service.exception.NoProductsSoldException;
 import com.API.Sistema.de.Inventario.service.exception.ProductServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,5 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleGenericException(Exception ex) {
         return new ResponseEntity<>("Error inesperado: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 
 }
