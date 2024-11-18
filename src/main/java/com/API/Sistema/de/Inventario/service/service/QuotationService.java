@@ -1,7 +1,9 @@
 package com.API.Sistema.de.Inventario.service.service;
 
+import com.API.Sistema.de.Inventario.persistence.entity.ClientEntity;
 import com.API.Sistema.de.Inventario.persistence.entity.ProductEntity;
 import com.API.Sistema.de.Inventario.persistence.entity.QuotationEntity;
+import com.API.Sistema.de.Inventario.persistence.repository.ClientRepository;
 import com.API.Sistema.de.Inventario.persistence.repository.ProductRepository;
 import com.API.Sistema.de.Inventario.persistence.repository.QuotationRepository;
 import com.itextpdf.text.*;
@@ -9,9 +11,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
-
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,10 +29,21 @@ public class QuotationService {
     @Autowired
     private QuotationRepository quotationRepository;
 
-    public String createQuotation(List<ProductEntity> selectedProducts) {
+    @Autowired
+    private ClientRepository clientRepository;
+
+    public String createQuotation(List<ProductEntity> selectedProducts, String clientName) {
         int total = 0;
         List<QuotationEntity.ProductDetail> productDetails = new ArrayList<>();
         StringBuilder quotationMessage = new StringBuilder();
+
+        List<ClientEntity> clients = clientRepository.findByNameContainingIgnoreCase(clientName);
+        if (clients.isEmpty()) {
+            throw new RuntimeException("Cliente no encontrado: " + clientName);
+        }
+
+
+        ClientEntity client = clients.get(0);
 
         for (ProductEntity selectedProduct : selectedProducts) {
             Optional<ProductEntity> product = productRepository.findByName(selectedProduct.getName());
@@ -61,11 +72,11 @@ public class QuotationService {
         QuotationEntity quotation = new QuotationEntity();
         quotation.setProductDetails(productDetails);
         quotation.setTotalPrice(total);
+        quotation.setClient(client);
         quotationRepository.save(quotation);
 
         quotationMessage.append("El precio total es: ").append(total);
 
-        // Generar PDF
         generatePDF(quotation);
 
         return quotationMessage.toString();
@@ -81,6 +92,16 @@ public class QuotationService {
             Paragraph title = new Paragraph("Cotización", titleFont);
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
+
+            document.add(Chunk.NEWLINE);
+
+            // Add client information
+            Font clientFont = FontFactory.getFont(FontFactory.HELVETICA, 12, BaseColor.BLACK);
+            Paragraph clientInfo = new Paragraph("Cliente: " + quotation.getClient().getName() + " " + quotation.getClient().getLastName() + "\n" +
+                    "Email: " + quotation.getClient().getGmail() + "\n" +
+                    "Teléfono: " + quotation.getClient().getPhone(), clientFont);
+            clientInfo.setAlignment(Element.ALIGN_LEFT);
+            document.add(clientInfo);
 
             document.add(Chunk.NEWLINE);
 
@@ -118,5 +139,4 @@ public class QuotationService {
             document.close();
         }
     }
-
 }

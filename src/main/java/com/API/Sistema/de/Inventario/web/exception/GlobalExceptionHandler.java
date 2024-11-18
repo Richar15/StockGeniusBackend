@@ -1,7 +1,6 @@
 package com.API.Sistema.de.Inventario.web.exception;
 
 import com.API.Sistema.de.Inventario.service.exception.ClientServiceException;
-import com.API.Sistema.de.Inventario.service.exception.NoProductsSoldException;
 import com.API.Sistema.de.Inventario.service.exception.ProductServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

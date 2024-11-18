@@ -21,6 +21,10 @@ public class QuotationEntity {
 
     private int totalPrice;
 
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private ClientEntity client;
+
     @Embeddable
     @Getter
     @Setter
